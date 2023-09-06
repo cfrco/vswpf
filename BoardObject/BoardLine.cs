@@ -37,7 +37,23 @@ namespace vswpf.BoardObject
             double b = Point0.X - Point1.X;
             double c = Point1.X * Point0.Y - Point0.X * Point1.Y;
 
-            return Math.Abs(a * position.X + b * position.Y + c) / Math.Sqrt(a * a + b * b);
+            double dist = Math.Abs(a * position.X + b * position.Y + c) / Math.Sqrt(a * a + b * b);
+            double d1 = distance(Point0, position);
+            double d2 = distance(Point1, position);
+            double rLine = distance(Point0, Point1);
+            double aLine = Math.Sqrt(d1 * d1 - dist * dist) + Math.Sqrt(d2 * d2 - dist * dist);
+            if (Math.Abs(rLine - aLine) > 1E-3)
+            {
+                return Math.Min(d1, d2);
+            }
+            return dist;
+        }
+
+        private static double distance(Point point0, Point point1)
+        {
+            double dx = point1.X - point0.X;
+            double dy = point1.Y - point0.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
         }
 
         public override IBoardObject Clone()
