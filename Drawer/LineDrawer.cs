@@ -7,6 +7,11 @@ namespace vswpf.Drawer
     {
         public override IBoardObject GetBoardObject()
         {
+            if (Geometry.Distance(start, end) <= 2)
+            {
+                return null;
+            }
+
             return new BoardLine()
             {
                 Point0 = start,

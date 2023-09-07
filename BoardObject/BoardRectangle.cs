@@ -23,13 +23,22 @@ namespace vswpf.BoardObject
 
         public override void Offset(Point offset)
         {
-            LeftTop  = new Point(LeftTop.X + offset.X, LeftTop.Y + offset.Y);
+            LeftTop = Geometry.Offset(LeftTop, offset);
         }
 
         public override void Render(IRenderEngine engine)
         {
-            Pen pen = new Pen() { Brush = new SolidColorBrush(Color), Thickness = Thickness };
+            Pen pen = new Pen(new SolidColorBrush(Color), Thickness);
             Render(engine, pen, LeftTop, Width, Height);
+
+            if (Selected)
+            {
+                pen = new Pen(Brushes.Black, 1);
+                engine.RenderSquare(pen, LeftTop, 5);
+                engine.RenderSquare(pen, Geometry.Offset(LeftTop, new Point(Width, 0)), 5);
+                engine.RenderSquare(pen, Geometry.Offset(LeftTop, new Point(0, Height)), 5);
+                engine.RenderSquare(pen, Geometry.Offset(LeftTop, new Point(Width, Height)), 5);
+            }
         }
 
         public override double MouseTest(Point position)

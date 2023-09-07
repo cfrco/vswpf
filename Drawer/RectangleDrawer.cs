@@ -35,6 +35,11 @@ namespace vswpf.Drawer
 
         public override IBoardObject GetBoardObject()
         {
+            if (Geometry.Distance(start, end) <= 2)
+            {
+                return null;
+            }
+
             Point leftTop;
             double width;
             double height;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Windows;
 using vswpf.BoardObject;
 
@@ -81,6 +82,15 @@ namespace vswpf
             if (!selected)
             {
                 hoveredObject = null;
+            }
+
+            boardObjects.Where(bo => bo is BoardShape)
+                .Select(bo => bo as BoardShape)
+                .ToList().ForEach(bo => { bo.Selected = false; });
+            BoardShape shape = hoveredObject as BoardShape;
+            if (shape != null)
+            {
+                shape.Selected = true;
             }
         }
 

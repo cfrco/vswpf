@@ -18,6 +18,8 @@ namespace vswpf
         HandTool handTool;
         List<IBoardObject> boardObjects = new List<IBoardObject>();
 
+        public event Action<VsBoard, IBoardObject> ObjectSelected;
+
         public VsBoard()
         {
             Background = Brushes.Gray;
@@ -92,6 +94,11 @@ namespace vswpf
                         boardObjects.Remove(boardObject);
                         handTool.Click(position);
                     }
+                }
+                else
+                {
+                    IBoardObject boardObject = handTool.GetHoveredObject();
+                    ObjectSelected?.Invoke(this, boardObject);
                 }
             }
 

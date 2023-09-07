@@ -21,14 +21,21 @@ namespace vswpf.BoardObject
 
         public override void Offset(Point offset)
         {
-            Point0  = new Point(Point0.X + offset.X, Point0.Y + offset.Y);
-            Point1  = new Point(Point1.X + offset.X, Point1.Y + offset.Y);
+            Point0 = Geometry.Offset(Point0, offset);
+            Point1 = Geometry.Offset(Point1, offset);
         }
 
         public override void Render(IRenderEngine engine)
         {
             Pen pen = new Pen(new SolidColorBrush(Color), Thickness);
             engine.RenderLine(pen, Point0, Point1);
+
+            if (Selected)
+            {
+                pen = new Pen(Brushes.Black, 1);
+                engine.RenderSquare(pen, Point0, 5);
+                engine.RenderSquare(pen, Point1, 5);
+            }
         }
 
         public override double MouseTest(Point position)
@@ -38,22 +45,15 @@ namespace vswpf.BoardObject
             double c = Point1.X * Point0.Y - Point0.X * Point1.Y;
 
             double dist = Math.Abs(a * position.X + b * position.Y + c) / Math.Sqrt(a * a + b * b);
-            double d1 = distance(Point0, position);
-            double d2 = distance(Point1, position);
-            double rLine = distance(Point0, Point1);
+            double d1 = Geometry.Distance(Point0, position);
+            double d2 = Geometry.Distance(Point1, position);
+            double rLine = Geometry.Distance(Point0, Point1);
             double aLine = Math.Sqrt(d1 * d1 - dist * dist) + Math.Sqrt(d2 * d2 - dist * dist);
             if (Math.Abs(rLine - aLine) > 1E-3)
             {
                 return Math.Min(d1, d2);
             }
             return dist;
-        }
-
-        private static double distance(Point point0, Point point1)
-        {
-            double dx = point1.X - point0.X;
-            double dy = point1.Y - point0.Y;
-            return Math.Sqrt(dx * dx + dy * dy);
         }
 
         public override IBoardObject Clone()

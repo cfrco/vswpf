@@ -1,26 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.DirectoryServices;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using vswpf.Drawer;
+using vswpf.BoardObject;
 
 namespace vswpf
 {
     public partial class MainWindow : Window
     {
         private VsBoard vsBoard;
+        private ShapeModifierPanel shapeModifierPanel;
 
         public MainWindow()
         {
@@ -31,7 +20,7 @@ namespace vswpf
             Grid grid = new Grid();
 
             ColumnDefinition col1 = new ColumnDefinition();
-            col1.Width = new GridLength(50);
+            col1.Width = new GridLength(60);
             ColumnDefinition col2 = new ColumnDefinition();
             grid.ColumnDefinitions.Add(col1);
             grid.ColumnDefinitions.Add(col2);
@@ -48,6 +37,7 @@ namespace vswpf
             grid.Children.Add(sPanel);
 
             vsBoard = new VsBoard();
+            vsBoard.ObjectSelected += vsBoard_ObjectSelected;
             Grid.SetColumn(vsBoard, 1);
             Grid.SetRow(vsBoard, 0);
             grid.Children.Add(vsBoard);
@@ -61,6 +51,9 @@ namespace vswpf
             Button button2 = newButton("Rect", button2_Click);
             panel.Children.Add(button2);
 
+            Button triangleButton = newButton("Triangle", triangleButton_Click);
+            panel.Children.Add(triangleButton);
+
             Button ellipseButton = newButton("Ellipse", ellipseButton_Click);
             panel.Children.Add(ellipseButton);
 
@@ -72,6 +65,10 @@ namespace vswpf
 
             Button clearButton = newButton("Clear", clearButton_Click);
             panel.Children.Add(clearButton);
+
+            shapeModifierPanel = new ShapeModifierPanel();
+            shapeModifierPanel.ValueChanged += shapeModifierPanel_ValueChanged;
+            panel.Children.Add(shapeModifierPanel);
         }
         private void button1_Click(object sender, RoutedEventArgs e)
         {
@@ -80,6 +77,10 @@ namespace vswpf
         private void button2_Click(object sender, RoutedEventArgs e)
         {
             vsBoard.SetDrawer(new RectangleDrawer());
+        }
+        private void triangleButton_Click(object sender, RoutedEventArgs e)
+        {
+            vsBoard.SetDrawer(new TriangleDrawer());
         }
         private void ellipseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -99,7 +100,6 @@ namespace vswpf
         {
             vsBoard.ClearObjects();
         }
-
         private Button newButton(string content, RoutedEventHandler handler)
         {
             Button button = new Button();
@@ -110,6 +110,21 @@ namespace vswpf
                 button.Click += handler;
             }
             return button;
+        }
+
+        private void vsBoard_ObjectSelected(VsBoard sender, IBoardObject obj)
+        {
+            if (obj == null)
+            {
+                return;
+            }
+
+            shapeModifierPanel.SetObject(obj);
+        }
+
+        private void shapeModifierPanel_ValueChanged(object sender, EventArgs e)
+        {
+            vsBoard.InvalidateVisual();
         }
     }
 }

@@ -9,6 +9,8 @@ namespace vswpf.BoardObject
 
         public Color Color { get; set; } = Colors.Red;
 
+        public bool Selected { get; set; } = false;
+
         public BoardShape()
         {
         }
@@ -17,6 +19,7 @@ namespace vswpf.BoardObject
         {
             Thickness = shape.Thickness;
             Color = shape.Color;
+            Selected = shape.Selected;
         }
 
         public abstract void Offset(Point offset);
