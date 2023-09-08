@@ -62,6 +62,20 @@ namespace vswpf
             InvalidateVisual();
         }
 
+        public IBoardObject[] GetObjects()
+        {
+            return boardObjects.ToArray();
+        }
+
+        public void SetObjects(IBoardObject[] objects)
+        {
+            boardObjects.Clear();
+            foreach (IBoardObject bo in objects)
+            {
+                boardObjects.Add(bo);
+            }
+        }
+
         private void onMouseDown(object sender, MouseEventArgs e)
         {
             Point position = e.GetPosition(sender as UIElement);

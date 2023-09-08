@@ -123,6 +123,7 @@ namespace vswpf
             hoveredObject = null;
             movedObject = null;
             movingObject = false;
+            selectToHovered();
         }
     }
 }

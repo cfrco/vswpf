@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using Newtonsoft.Json;
 using vswpf.Drawer;
 using vswpf.BoardObject;
 
@@ -10,6 +11,11 @@ namespace vswpf
     {
         private VsBoard vsBoard;
         private ShapeModifierPanel shapeModifierPanel;
+
+        private JsonSerializerSettings serializerSettings = new JsonSerializerSettings()
+        {
+            TypeNameHandling = TypeNameHandling.Auto,
+        };
 
         public MainWindow()
         {
@@ -48,6 +54,9 @@ namespace vswpf
             shapeModifierPanel = new ShapeModifierPanel();
             shapeModifierPanel.ValueChanged += shapeModifierPanel_ValueChanged;
             panel.Children.Add(shapeModifierPanel);
+
+            panel.Children.Add(newButton("Save", saveButton_Click));
+            panel.Children.Add(newButton("Load", loadButton_Click));
         }
         private void handButton_Click(object sender, RoutedEventArgs e)
         {
@@ -63,12 +72,58 @@ namespace vswpf
         {
             vsBoard.ClearObjects();
         }
+        private void saveButton_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
+            sfd.Filter = "BoardFile (*.board)|*.board";
+            Nullable<bool> result = sfd.ShowDialog();
+            if (!result.HasValue || !result.Value)
+            {
+                return;
+            }
+
+            try
+            {
+                string text = JsonConvert.SerializeObject(vsBoard.GetObjects(), serializerSettings);
+                System.IO.File.WriteAllText(sfd.FileName, text);
+            }
+            catch (Exception ex)
+            {
+                // TODO: beter error handling
+                MessageBox.Show("Fail to save: " + ex.Message);
+            }
+        }
+        private void loadButton_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
+            ofd.Filter = "BoardFile (*.board)|*.board";
+            Nullable<bool> result = ofd.ShowDialog();
+            if (!result.HasValue || !result.Value)
+            {
+                return;
+            }
+
+            try
+            {
+                string text = System.IO.File.ReadAllText(ofd.FileName);
+                IBoardObject[] boardObjects = JsonConvert.DeserializeObject<IBoardObject[]>(text, serializerSettings);
+                if (boardObjects != null)
+                {
+                    vsBoard.SetObjects(boardObjects);
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: beter error handling
+                MessageBox.Show("Fail to load: " + ex.Message);
+            }
+        }
         private Button newButton(string content, RoutedEventHandler handler)
         {
             Button button = new Button()
             {
                 Content = content,
-                Height = 50,
+                Height = 40,
             };
             if (handler != null) 
             {
