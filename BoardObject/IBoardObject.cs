@@ -1,4 +1,5 @@
 using System.Windows;
+using vswpf.RenderEngine;
 
 namespace vswpf.BoardObject
 {

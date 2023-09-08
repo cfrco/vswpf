@@ -6,6 +6,12 @@ using vswpf.BoardObject;
 
 namespace vswpf
 {
+    enum HandMode
+    {
+        Move,
+        Erase,
+    }
+
     class HandTool
     {
         private List<IBoardObject> boardObjects;
@@ -66,6 +72,7 @@ namespace vswpf
 
             checkHover(position);
         }
+        
         private void checkHover(Point position)
         {
             bool selected = false;
@@ -117,11 +124,5 @@ namespace vswpf
             movedObject = null;
             movingObject = false;
         }
-    }
-
-    enum HandMode
-    {
-        Move,
-        Erase,
     }
 }

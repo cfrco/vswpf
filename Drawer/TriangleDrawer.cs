@@ -1,7 +1,7 @@
-using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Media;
 using vswpf.BoardObject;
+using vswpf.RenderEngine;
 
 namespace vswpf.Drawer
 {
@@ -33,9 +33,7 @@ namespace vswpf.Drawer
             Point point1;
             Point point2;
             calculateTrinagle(out point0, out point1, out point2);
-            engine.RenderLine(pen, point0, point1);
-            engine.RenderLine(pen, point1, point2);
-            engine.RenderLine(pen, point0, point2);
+            BoardTriangle.Render(engine, pen, point0, point1, point2);
         }
 
         private void calculateTrinagle(out Point point0, out Point point1, out Point point2)

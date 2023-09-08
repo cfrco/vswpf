@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Media;
+using vswpf.RenderEngine;
 
 namespace vswpf.BoardObject
 {
@@ -85,6 +86,31 @@ namespace vswpf.BoardObject
             engine.RenderLine(pen, new Point(point.X, point.Y + height), new Point(point.X + width, point.Y + height));
             engine.RenderLine(pen, new Point(point.X, point.Y), new Point(point.X, point.Y + height));
             engine.RenderLine(pen, new Point(point.X + width, point.Y), new Point(point.X + width, point.Y + height));
+        }
+
+        public static void CalcRecntagle(Point point0, Point point1, out Point leftTop, out double width, out double height)
+        {
+            double x1 = point0.X;
+            double x2 = point1.X;
+            double y1 = point0.Y;
+            double y2 = point1.Y;
+
+            if (x1 > x2)
+            {
+                double tmp = x2;
+                x2 = x1;
+                x1 = tmp;
+            }
+            if (y1 > y2)
+            {
+                double tmp = y2;
+                y2 = y1;
+                y1 = tmp;
+            }
+
+            leftTop = new Point(x1, y1);
+            width = x2 - x1;
+            height = y2 - y1;
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Windows;
 using vswpf.BoardObject;
+using vswpf.RenderEngine;
 
 namespace vswpf.Drawer
 {
@@ -13,6 +14,6 @@ namespace vswpf.Drawer
 
         void Render(IRenderEngine engine);
 
-        IBoardObject GetBoardObject();
+        IBoardObject? GetBoardObject();
     }
 }

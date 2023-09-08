@@ -1,22 +1,25 @@
 using System.Windows;
 using System.Windows.Media;
 
-public class NativeDrawingRenderEngine : IRenderEngine
+namespace vswpf.RenderEngine
 {
-    private DrawingContext dc;
-
-    public NativeDrawingRenderEngine(DrawingContext dc)
+    public class NativeDrawingRenderEngine : IRenderEngine
     {
-        this.dc = dc;
-    }
+        private DrawingContext dc;
 
-    public void RenderLine(Pen pen, Point point0, Point point1)
-    {
-        dc.DrawLine(pen, point0, point1);
-    }
+        public NativeDrawingRenderEngine(DrawingContext dc)
+        {
+            this.dc = dc;
+        }
 
-    public void RenderEllipse(Brush brush, Pen pen, Point center, double radiusX, double radiusY)
-    {
-        dc.DrawEllipse(brush, pen, center, radiusX, radiusY);
+        public void RenderLine(Pen pen, Point point0, Point point1)
+        {
+            dc.DrawLine(pen, point0, point1);
+        }
+
+        public void RenderEllipse(Brush brush, Pen pen, Point center, double radiusX, double radiusY)
+        {
+            dc.DrawEllipse(brush, pen, center, radiusX, radiusY);
+        }
     }
 }

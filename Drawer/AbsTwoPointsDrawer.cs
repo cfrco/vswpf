@@ -1,5 +1,6 @@
 using System.Windows;
 using vswpf.BoardObject;
+using vswpf.RenderEngine;
 
 namespace vswpf.Drawer
 {

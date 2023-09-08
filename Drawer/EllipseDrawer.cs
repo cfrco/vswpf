@@ -1,7 +1,6 @@
-
-using System.Windows;
 using System.Windows.Media;
 using vswpf.BoardObject;
+using vswpf.RenderEngine;
 
 namespace vswpf.Drawer
 {
@@ -23,9 +22,8 @@ namespace vswpf.Drawer
 
         public override void Render(IRenderEngine engine)
         {
-            Brush brush = null;
             Pen pen = new Pen(Brushes.Red, 1);
-            BoardEllipse.Render(engine, brush, pen, start, end);
+            BoardEllipse.Render(engine, null, pen, start, end);
         }
     }
 }

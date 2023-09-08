@@ -1,6 +1,6 @@
-using System;
 using System.Windows;
 using System.Windows.Media;
+using vswpf.RenderEngine;
 
 namespace vswpf.BoardObject
 {
@@ -31,9 +31,7 @@ namespace vswpf.BoardObject
         public override void Render(IRenderEngine engine)
         {
             Pen pen = new Pen(new SolidColorBrush(Color), Thickness);
-            engine.RenderLine(pen, Point0, Point1);
-            engine.RenderLine(pen, Point1, Point2);
-            engine.RenderLine(pen, Point0, Point2);
+            Render(engine, pen, Point0, Point1, Point2);
 
             if (Selected)
             {
@@ -64,6 +62,13 @@ namespace vswpf.BoardObject
         public override IBoardObject Clone()
         {
             return new BoardTriangle(this);
+        }
+
+        public static void Render(IRenderEngine engine, Pen pen, Point point0, Point point1, Point point2)
+        {
+            engine.RenderLine(pen, point0, point1);
+            engine.RenderLine(pen, point1, point2);
+            engine.RenderLine(pen, point0, point2);
         }
     }
 }
