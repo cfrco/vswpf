@@ -21,7 +21,7 @@ namespace vswpf.Drawer
 
         public override void Render(IRenderEngine engine)
         {
-            BoardEllipse.Render(engine, null, getPen(), start, end);
+            BoardEllipse.Render(engine, getBrush(), getPen(), start, end);
         }
     }
 }

@@ -32,7 +32,14 @@ namespace vswpf.Drawer
             double width;
             double height;
             BoardRectangle.CalcRecntagle(start, end, out leftTop, out width, out height);
-            BoardRectangle.Render(engine, getPen(), leftTop, width, height);
+            if (thickness <= 0)
+            {
+                BoardRectangle.Render(engine, new SolidColorBrush(color), null, leftTop, width, height);
+            }
+            else
+            {
+                BoardRectangle.Render(engine, null, getPen(), leftTop, width, height);
+            }
         }
     }
 }

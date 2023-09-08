@@ -32,7 +32,7 @@ namespace vswpf.Drawer
             Point point1;
             Point point2;
             calculateTrinagle(out point0, out point1, out point2);
-            BoardTriangle.Render(engine, getPen(), point0, point1, point2);
+            BoardTriangle.Render(engine, getBrush(), getPen(), point0, point1, point2);
         }
 
         private void calculateTrinagle(out Point point0, out Point point1, out Point point2)

@@ -28,13 +28,11 @@ namespace vswpf.BoardObject
 
         public override void Render(IRenderEngine engine)
         {
-            Brush brush = new SolidColorBrush(Color);
-            Pen pen = new Pen(brush, Thickness);
-            Render(engine, null, pen, Point0, Point1);
+            Render(engine, getBrush(), getPen(), Point0, Point1);
 
             if (Selected)
             {
-                pen = new Pen(Brushes.Black, 1);
+                Pen pen = new Pen(Brushes.Black, 1);
                 double x, y, rx, ry;
                 calculateEllipse(Point0, Point1, out x, out y, out rx, out ry);
                 engine.RenderSquare(pen, new Point(x + rx, y), 5);
@@ -44,16 +42,24 @@ namespace vswpf.BoardObject
             }
         }
 
-        public override double MouseTest(Point position)
+        public override bool MouseTest(Point position, double distance)
         {
             double x, y, rx, ry;
             calculateEllipse(Point0, Point1, out x, out y, out rx, out ry);
-            double ellipseEquation = Math.Pow((position.X - x) / rx, 2) + Math.Pow((position.Y - y) / ry, 2);
-            if (ellipseEquation <= 1)
+
+            double thickness = Thickness > 0 ? Thickness : 0;
+
+            double rx1 = rx - thickness / 2 - distance;
+            double ry1 = ry - thickness / 2 - distance;
+            double eq1 = Math.Pow((position.X - x) / rx1, 2) + Math.Pow((position.Y - y) / ry1, 2);
+            double rx2 = rx + thickness / 2 + distance;
+            double ry2 = ry + thickness / 2 + distance;
+            double eq2 = Math.Pow((position.X - x) / rx2, 2) + Math.Pow((position.Y - y) / ry2, 2);
+            if (thickness <= 0)
             {
-                return 0;
+                return eq2 <= 1;
             }
-            return 1000; // TODO
+            return eq1 > 1 && eq2 <= 1;
         }
 
         public override IBoardObject Clone()

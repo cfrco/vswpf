@@ -24,10 +24,24 @@ namespace vswpf.Drawer
             this.thickness = thickness;
             this.color = color;
         }
-        protected Pen getPen()
+
+        protected Brush? getBrush()
         {
-            return new Pen(new SolidColorBrush(color), thickness);
+            if (thickness <= 0)
+            {
+                return new SolidColorBrush(color);
+            }
+            return null;
         }
+        protected Pen? getPen()
+        {
+            if (thickness > 0)
+            {
+                return new Pen(new SolidColorBrush(color), thickness);
+            }
+            return null;
+        }
+
         protected IBoardObject adjustShape(BoardShape shape)
         {
             shape.Thickness = thickness;

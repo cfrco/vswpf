@@ -22,7 +22,7 @@ namespace vswpf.Drawer
 
         public override void Render(IRenderEngine engine)
         {
-            engine.RenderLine(getPen(), start, end);
+            engine.RenderLine(new Pen(new SolidColorBrush(color), thickness > 0 ? thickness : 1), start, end);
         }
     }
 }

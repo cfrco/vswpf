@@ -19,7 +19,7 @@ namespace vswpf
         private BoardShape selectedShape;
         public event EventHandler ValueChanged;
 
-        public double Thickness { get { return scrollBar.Value; } }
+        public double Thickness { get { return Math.Round(scrollBar.Value); } }
         public Color Color { get { return (colorPanel.Background as SolidColorBrush).Color; } }
 
         public ShapeModifierPanel()
@@ -37,8 +37,9 @@ namespace vswpf
             scrollBar = new ScrollBar();
             scrollBar.Orientation = Orientation.Horizontal;
             scrollBar.SmallChange = 1;
-            scrollBar.Minimum = 1;
+            scrollBar.Minimum = 0;
             scrollBar.Maximum = 15;
+            scrollBar.Value = 1;
             scrollBar.ValueChanged += scrollBar_ValueChanged;
             Children.Add(scrollBar);
 
@@ -59,6 +60,7 @@ namespace vswpf
             BoardShape shape = boardObject as BoardShape;
             if (shape == null)
             {
+                selectedShape = null;
                 return;
             }
             selectedShape = shape;
@@ -74,8 +76,8 @@ namespace vswpf
             if (selectedShape != null)
             {
                 selectedShape.Thickness = Math.Round(scrollBar.Value);
-                ValueChanged?.Invoke(this, EventArgs.Empty);
             }
+            ValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void colorPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e)

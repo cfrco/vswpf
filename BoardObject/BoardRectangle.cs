@@ -29,12 +29,11 @@ namespace vswpf.BoardObject
 
         public override void Render(IRenderEngine engine)
         {
-            Pen pen = new Pen(new SolidColorBrush(Color), Thickness);
-            Render(engine, pen, LeftTop, Width, Height);
+            Render(engine, getBrush(), getPen(), LeftTop, Width, Height);
 
             if (Selected)
             {
-                pen = new Pen(Brushes.Black, 1);
+                Pen pen = new Pen(Brushes.Black, 1);
                 engine.RenderSquare(pen, LeftTop, 5);
                 engine.RenderSquare(pen, Geometry.Offset(LeftTop, new Point(Width, 0)), 5);
                 engine.RenderSquare(pen, Geometry.Offset(LeftTop, new Point(0, Height)), 5);
@@ -42,37 +41,23 @@ namespace vswpf.BoardObject
             }
         }
 
-        public override double MouseTest(Point position)
+        public override bool MouseTest(Point position, double distance)
         {
-            double dx = 0;
-            if (position.X < LeftTop.X) 
+            if (Thickness <= 0)
             {
-                dx = LeftTop.X - position.X;
-            }
-            else if (position.X >= LeftTop.X && position.X <= LeftTop.X + Width)
-            {
-                dx = 0;
-            }
-            else 
-            {
-                dx = position.X - LeftTop.X;
+                return position.X >= LeftTop.X && position.X <= LeftTop.X + Width &&
+                    position.Y >= LeftTop.Y && position.Y <= LeftTop.Y + Height;
             }
 
-            double dy = 0;
-            if (position.Y < LeftTop.Y)
-            {
-                dy = LeftTop.Y - position.Y;
-            }
-            else if (position.Y >= LeftTop.Y && position.Y <= LeftTop.Y + Height)
-            {
-                dy = 0;
-            }
-            else 
-            {
-                dy = position.Y - LeftTop.Y;
-            }
+            Point point0 = LeftTop;
+            Point point1 = Geometry.Offset(LeftTop, new Point(0, Height));
+            Point point2 = Geometry.Offset(LeftTop, new Point(Width, Height));
+            Point point3 = Geometry.Offset(LeftTop, new Point(Width, 0));
 
-            return Math.Sqrt(Math.Pow(dx, 2) + Math.Pow(dy, 2));
+            return Geometry.PointInLine(point0, point1, position, Thickness, distance) ||
+                Geometry.PointInLine(point1, point2, position, Thickness, distance) ||
+                Geometry.PointInLine(point2, point3, position, Thickness, distance) ||
+                Geometry.PointInLine(point3, point0, position, Thickness, distance);
         }
 
         public override IBoardObject Clone()
@@ -80,12 +65,13 @@ namespace vswpf.BoardObject
             return new BoardRectangle(this);
         }
 
-        public static void Render(IRenderEngine engine, Pen pen, Point point, double width, double height)
+        public static void Render(IRenderEngine engine, Brush brush, Pen pen, Point point, double width, double height)
         {
-            engine.RenderLine(pen, new Point(point.X, point.Y), new Point(point.X + width, point.Y));
-            engine.RenderLine(pen, new Point(point.X, point.Y + height), new Point(point.X + width, point.Y + height));
-            engine.RenderLine(pen, new Point(point.X, point.Y), new Point(point.X, point.Y + height));
-            engine.RenderLine(pen, new Point(point.X + width, point.Y), new Point(point.X + width, point.Y + height));
+            Point point0 = point;
+            Point point1 = Geometry.Offset(point, new Point(0, height));
+            Point point2 = Geometry.Offset(point, new Point(width, height));
+            Point point3 = Geometry.Offset(point, new Point(width, 0));
+            engine.RenderPath(brush, pen, new Point[] { point0, point1, point2, point3 });
         }
 
         public static void CalcRecntagle(Point point0, Point point1, out Point leftTop, out double width, out double height)

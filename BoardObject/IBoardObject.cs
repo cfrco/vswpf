@@ -7,7 +7,7 @@ namespace vswpf.BoardObject
     {
         void Render(IRenderEngine engine);
 
-        double MouseTest(Point position);
+        bool MouseTest(Point position, double distance);
 
         void Offset(Point offset);
 

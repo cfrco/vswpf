@@ -87,11 +87,6 @@ namespace vswpf
 
         private void vsBoard_ObjectSelected(VsBoard sender, IBoardObject obj)
         {
-            if (obj == null)
-            {
-                return;
-            }
-
             shapeModifierPanel.SetObject(obj);
         }
 

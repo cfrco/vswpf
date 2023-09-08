@@ -51,6 +51,8 @@ namespace vswpf
                 return;
             }
 
+            selectToHovered();
+
             movingStart = position;
             movingObject = true;
             movingIndex = boardObjects.IndexOf(hoveredObject);
@@ -78,8 +80,7 @@ namespace vswpf
             bool selected = false;
             foreach (IBoardObject bo in boardObjects)
             {
-                double dist = bo.MouseTest(position);
-                if (dist < 2)
+                if (bo.MouseTest(position, 2))
                 {
                     selected = true;
                     hoveredObject = bo;
@@ -90,7 +91,10 @@ namespace vswpf
             {
                 hoveredObject = null;
             }
+        }
 
+        private void selectToHovered()
+        {
             boardObjects.Where(bo => bo is BoardShape)
                 .Select(bo => bo as BoardShape)
                 .ToList().ForEach(bo => { bo.Selected = false; });
@@ -103,13 +107,9 @@ namespace vswpf
 
         public bool Click(Point position)
         {
-            if (!movingObject)
-            {
-                return false;
-            }
-
             Reset();
             checkHover(position);
+            selectToHovered();
             return false;
         }
 

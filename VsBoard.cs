@@ -37,6 +37,7 @@ namespace vswpf
         {
             this.drawer = drawer;
             handTool.Reset();
+            ObjectSelected?.Invoke(this, null);
         }
 
         public void SetDrawerAttributes(double thickness, Color color)
@@ -142,6 +143,8 @@ namespace vswpf
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
+
+            dc.PushClip(new RectangleGeometry(new Rect(0, 0, ActualWidth, ActualHeight)));
 
             IRenderEngine engine = new NativeDrawingRenderEngine(dc);
 

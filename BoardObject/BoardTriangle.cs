@@ -30,33 +30,35 @@ namespace vswpf.BoardObject
 
         public override void Render(IRenderEngine engine)
         {
-            Pen pen = new Pen(new SolidColorBrush(Color), Thickness);
-            Render(engine, pen, Point0, Point1, Point2);
+            Render(engine, getBrush(), getPen(), Point0, Point1, Point2);
 
             if (Selected)
             {
-                pen = new Pen(Brushes.Black, 1);
+                Pen pen = new Pen(Brushes.Black, 1);
                 engine.RenderSquare(pen, Point0, 5);
                 engine.RenderSquare(pen, Point1, 5);
                 engine.RenderSquare(pen, Point2, 5);
             }
         }
 
-        public override double MouseTest(Point position)
+        public override bool MouseTest(Point position, double distance)
         {
-            // From ChatGPT
-            // Compute barycentric coordinates
-            double denom = (Point1.Y - Point2.Y) * (Point0.X - Point2.X) + (Point2.X - Point1.X) * (Point0.Y - Point2.Y);
-            double a = ((Point1.Y - Point2.Y) * (position.X - Point2.X) + (Point2.X - Point1.X) * (position.Y - Point2.Y)) / denom;
-            double b = ((Point2.Y - Point0.Y) * (position.X - Point2.X) + (Point0.X - Point2.X) * (position.Y - Point2.Y)) / denom;
-            double c = 1.0 - a - b;
-
-            // Check if point is inside the triangle
-            if (0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1)
+            if (Thickness <= 0)
             {
-                return 0;
+                // From ChatGPT
+                // Compute barycentric coordinates
+                double denom = (Point1.Y - Point2.Y) * (Point0.X - Point2.X) + (Point2.X - Point1.X) * (Point0.Y - Point2.Y);
+                double a = ((Point1.Y - Point2.Y) * (position.X - Point2.X) + (Point2.X - Point1.X) * (position.Y - Point2.Y)) / denom;
+                double b = ((Point2.Y - Point0.Y) * (position.X - Point2.X) + (Point0.X - Point2.X) * (position.Y - Point2.Y)) / denom;
+                double c = 1.0 - a - b;
+
+                // Check if point is inside the triangle
+                return (0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1);
             }
-            return 1000;
+
+            return Geometry.PointInLine(Point0, Point1, position, Thickness, distance) ||
+                Geometry.PointInLine(Point1, Point2, position, Thickness, distance) ||
+                Geometry.PointInLine(Point2, Point0, position, Thickness, distance);
         }
 
         public override IBoardObject Clone()
@@ -64,11 +66,9 @@ namespace vswpf.BoardObject
             return new BoardTriangle(this);
         }
 
-        public static void Render(IRenderEngine engine, Pen pen, Point point0, Point point1, Point point2)
+        public static void Render(IRenderEngine engine, Brush brush, Pen pen, Point point0, Point point1, Point point2)
         {
-            engine.RenderLine(pen, point0, point1);
-            engine.RenderLine(pen, point1, point2);
-            engine.RenderLine(pen, point0, point2);
+            engine.RenderPath(brush, pen, new Point[] { point0, point1, point2 });
         }
     }
 }
