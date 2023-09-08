@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Media;
 using vswpf.BoardObject;
 using vswpf.RenderEngine;
 
@@ -13,6 +14,25 @@ namespace vswpf.Drawer
         public bool Started
         {
             get { return started; }
+        }
+
+        protected double thickness;
+        protected Color color;
+
+        public void SetAttributes(double thickness, Color color)
+        {
+            this.thickness = thickness;
+            this.color = color;
+        }
+        protected Pen getPen()
+        {
+            return new Pen(new SolidColorBrush(color), thickness);
+        }
+        protected IBoardObject adjustShape(BoardShape shape)
+        {
+            shape.Thickness = thickness;
+            shape.Color = color;
+            return shape;
         }
 
         public void Start(Point position)

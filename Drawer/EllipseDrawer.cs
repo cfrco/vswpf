@@ -1,4 +1,3 @@
-using System.Windows.Media;
 using vswpf.BoardObject;
 using vswpf.RenderEngine;
 
@@ -13,17 +12,16 @@ namespace vswpf.Drawer
                 return null;
             }
 
-            return new BoardEllipse()
+            return adjustShape(new BoardEllipse()
             {
                 Point0 = start,
                 Point1 = end,
-            };
+            });
         }
 
         public override void Render(IRenderEngine engine)
         {
-            Pen pen = new Pen(Brushes.Red, 1);
-            BoardEllipse.Render(engine, null, pen, start, end);
+            BoardEllipse.Render(engine, null, getPen(), start, end);
         }
     }
 }

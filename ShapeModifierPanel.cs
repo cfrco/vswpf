@@ -19,6 +19,9 @@ namespace vswpf
         private BoardShape selectedShape;
         public event EventHandler ValueChanged;
 
+        public double Thickness { get { return scrollBar.Value; } }
+        public Color Color { get { return (colorPanel.Background as SolidColorBrush).Color; } }
+
         public ShapeModifierPanel()
         {
             thicknessLabel = new Label();
@@ -87,6 +90,8 @@ namespace vswpf
                 cw.G = brush.Color.G;
                 cw.B = brush.Color.B;
             }
+            cw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            cw.Owner = Window.GetWindow(this);
             cw.ShowDialog();
 
             Color color = Color.FromArgb(255, cw.R, cw.G, cw.B);
@@ -95,8 +100,8 @@ namespace vswpf
             if (selectedShape != null)
             {
                 selectedShape.Color = color;
-                ValueChanged?.Invoke(this, EventArgs.Empty);
             }
+            ValueChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -178,7 +183,7 @@ namespace vswpf
             return textBox;
         }
 
-        private void textBox_ValueChanged(object sender, EventArgs e)
+        private void textBox_ValueChanged(object? sender, EventArgs e)
         {
             colorPanel.Background = new SolidColorBrush(Color.FromRgb((byte)rTextBox.Value, (byte)gTextBox.Value, (byte)bTextBox.Value));
         }

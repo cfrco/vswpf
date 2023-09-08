@@ -78,7 +78,11 @@ namespace vswpf
         }
         private RoutedEventHandler drawerButton_ClickEvent(IDrawer drawer)
         {
-            return (sender, e) => vsBoard.SetDrawer(drawer);
+            return (sender, e) =>
+            {
+                drawer.SetAttributes(shapeModifierPanel.Thickness, shapeModifierPanel.Color);
+                vsBoard.SetDrawer(drawer);
+            };
         }
 
         private void vsBoard_ObjectSelected(VsBoard sender, IBoardObject obj)
@@ -91,8 +95,9 @@ namespace vswpf
             shapeModifierPanel.SetObject(obj);
         }
 
-        private void shapeModifierPanel_ValueChanged(object sender, EventArgs e)
+        private void shapeModifierPanel_ValueChanged(object? sender, EventArgs e)
         {
+            vsBoard.SetDrawerAttributes(shapeModifierPanel.Thickness, shapeModifierPanel.Color);
             vsBoard.InvalidateVisual();
         }
     }

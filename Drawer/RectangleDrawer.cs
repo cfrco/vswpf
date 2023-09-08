@@ -18,22 +18,21 @@ namespace vswpf.Drawer
             double width;
             double height;
             BoardRectangle.CalcRecntagle(start, end, out leftTop, out width, out height);
-            return new BoardRectangle()
+            return adjustShape(new BoardRectangle()
             {
                 LeftTop = leftTop,
                 Width = width,
                 Height = height,
-            };
+            });
         }
 
         public override void Render(IRenderEngine engine)
         {
-            Pen pen = new Pen(Brushes.Red, 1);
             Point leftTop;
             double width;
             double height;
             BoardRectangle.CalcRecntagle(start, end, out leftTop, out width, out height);
-            BoardRectangle.Render(engine, pen, leftTop, width, height);
+            BoardRectangle.Render(engine, getPen(), leftTop, width, height);
         }
     }
 }

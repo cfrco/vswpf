@@ -39,6 +39,15 @@ namespace vswpf
             handTool.Reset();
         }
 
+        public void SetDrawerAttributes(double thickness, Color color)
+        {
+            if (drawer == null)
+            {
+                return;
+            }
+            drawer.SetAttributes(thickness, color);
+        }
+
         public void SetHandMode(HandMode mode)
         {
             handTool.Mode = mode;

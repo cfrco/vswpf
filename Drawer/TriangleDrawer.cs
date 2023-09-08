@@ -18,22 +18,21 @@ namespace vswpf.Drawer
             Point point1;
             Point point2;
             calculateTrinagle(out point0, out point1, out point2);
-            return new BoardTriangle()
+            return adjustShape(new BoardTriangle()
             {
                 Point0 = point0,
                 Point1 = point1,
                 Point2 = point2,
-            };
+            });
         }
 
         public override void Render(IRenderEngine engine)
         {
-            Pen pen = new Pen(Brushes.Red, 1);
             Point point0;
             Point point1;
             Point point2;
             calculateTrinagle(out point0, out point1, out point2);
-            BoardTriangle.Render(engine, pen, point0, point1, point2);
+            BoardTriangle.Render(engine, getPen(), point0, point1, point2);
         }
 
         private void calculateTrinagle(out Point point0, out Point point1, out Point point2)

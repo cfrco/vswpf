@@ -13,17 +13,16 @@ namespace vswpf.Drawer
                 return null;
             }
 
-            return new BoardLine()
+            return adjustShape(new BoardLine()
             {
                 Point0 = start,
                 Point1 = end,
-            };
+            });
         }
 
         public override void Render(IRenderEngine engine)
         {
-            Pen pen = new Pen(Brushes.Red, 1);
-            engine.RenderLine(pen, start, end);
+            engine.RenderLine(getPen(), start, end);
         }
     }
 }
