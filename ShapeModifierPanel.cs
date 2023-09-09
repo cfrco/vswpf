@@ -99,9 +99,13 @@ namespace vswpf
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 Owner = Window.GetWindow(this)
             };
+            Color color = getColor();
+            cw.R = color.R;
+            cw.G = color.G;
+            cw.B = color.B;
             cw.ShowDialog();
 
-            Color color = getColor();
+            color = Color.FromArgb(255, cw.R, cw.G, cw.B);
             colorPanel.Background = new SolidColorBrush(color);
 
             if (selectedShape != null)
