@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using vswpf.Drawer;
 using vswpf.BoardObject;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace vswpf
 {
@@ -16,8 +17,8 @@ namespace vswpf
         private ShapeModifierPanel shapeModifierPanel;
 
         // Board
-        private IBoardObject selectedObject;
-        private IBoardObject copiedObject;
+        private IBoardObject? selectedObject;
+        private IBoardObject? copiedObject;
 
         // Exporting
         private JsonSerializerSettings serializerSettings = new JsonSerializerSettings()
@@ -38,15 +39,30 @@ namespace vswpf
                 Width = new GridLength(60)
             });
             grid.ColumnDefinitions.Add(new ColumnDefinition());
+            grid.RowDefinitions.Add(new RowDefinition()
+            {
+                Height = new GridLength(24)
+            });
             grid.RowDefinitions.Add(new RowDefinition());
+
+            ToolBar toolBar = new ToolBar();
+            toolBar.Items.Add(newButton("Save", saveButton_Click));
+            toolBar.Items.Add(newButton("Load", loadButton_Click));
+            toolBar.Items.Add(new Separator());
+            toolBar.Items.Add(newButton("Clear", clearButton_Click));
+            toolBar.Items.Add(new Separator());
+            toolBar.Items.Add(newButton("Undo", undoButton_Click));
+            toolBar.Items.Add(newButton("Redo", redoButton_Click));
+            grid.AddChild(toolBar, 0, 0);
+            Grid.SetColumnSpan(toolBar, 2);
 
             StackPanel sPanel = new StackPanel();
             initSideBar(sPanel);
-            grid.AddChild(sPanel, 0, 0);
+            grid.AddChild(sPanel, 1, 0);
 
             vsBoard = new VsBoard();
             vsBoard.ObjectSelected += vsBoard_ObjectSelected;
-            grid.AddChild(vsBoard, 0, 1);
+            grid.AddChild(vsBoard, 1, 1);
 
             KeyDown += onKeyDown;
             KeyUp += onKeyUp;
@@ -60,16 +76,11 @@ namespace vswpf
             panel.Children.Add(newButton("Ellipse", drawerButton_ClickEvent(new EllipseDrawer())));
             panel.Children.Add(newButton("Hand", handButton_Click));
             panel.Children.Add(newButton("Erase", eraseButton_Click));
-            panel.Children.Add(newButton("Clear", clearButton_Click));
 
             shapeModifierPanel = new ShapeModifierPanel();
             shapeModifierPanel.ValueChanged += shapeModifierPanel_ValueChanged;
             panel.Children.Add(shapeModifierPanel);
 
-            panel.Children.Add(newButton("Save", saveButton_Click));
-            panel.Children.Add(newButton("Load", loadButton_Click));
-            panel.Children.Add(newButton("Undo", undoButton_Click));
-            panel.Children.Add(newButton("Redo", redoButton_Click));
         }
         private void handButton_Click(object sender, RoutedEventArgs e)
         {
