@@ -18,6 +18,10 @@ namespace vswpf
         HandTool handTool;
         List<IBoardObject> boardObjects = new List<IBoardObject>();
 
+        BoardHistory history = new BoardHistory(100);
+        private IBoardObject mouseDownObject;
+        private bool objectMoved = false;
+
         public event Action<VsBoard, IBoardObject>? ObjectSelected;
 
         public VsBoard()
@@ -76,14 +80,86 @@ namespace vswpf
             }
         }
 
-        public void AddObject(IBoardObject boardObject)
+        public void AddObject(IBoardObject? boardObject)
         {
             if (boardObject == null)
             {
                 return;
             }
 
+            history.Push(new BoardHistoryItem()
+            {
+                Index = boardObjects.Count,
+                Action = BoardAction.Add,
+                New = clone(boardObject),
+            });
             boardObjects.Add(boardObject);
+        }
+
+        public void Undo()
+        {
+            BoardHistoryItem? item = history.Pop();
+            if (item == null)
+            {
+                return;
+            }
+
+            if (item.Action == BoardAction.Add)
+            {
+                boardObjects.RemoveAt(item.Index);
+            }
+            else if (item.Action == BoardAction.Remove)
+            {
+                if (item.Original != null)
+                {
+                    boardObjects.Add(clone(item.Original));
+                }
+            }
+            else if (item.Action == BoardAction.Modify)
+            {
+                if (item.Original != null)
+                {
+                    boardObjects.RemoveAt(item.Index);
+                    boardObjects.Insert(item.Index, clone(item.Original));
+                }
+            }
+        }
+
+        public void Redo()
+        {
+            BoardHistoryItem? item = history.Forward();
+            if (item == null)
+            {
+                return;
+            }
+
+            if (item.Action == BoardAction.Add)
+            {
+                if (item.New != null)
+                {
+                    boardObjects.Insert(item.Index, clone(item.New));
+                }
+            }
+            else if (item.Action == BoardAction.Remove)
+            {
+                boardObjects.RemoveAt(item.Index);
+            }
+            else if (item.Action == BoardAction.Modify)
+            {
+                if (item.New != null)
+                {
+                    boardObjects.RemoveAt(item.Index);
+                    boardObjects.Insert(item.Index, clone(item.New));
+                }
+            }
+        }
+
+        private IBoardObject clone(IBoardObject boardObject)
+        {
+            // When Clone BoardObject, reset it's selected status.
+            IBoardObject newBoardObject = boardObject.Clone();
+            newBoardObject.Selected = false;
+            return newBoardObject;
         }
 
         private void onMouseDown(object sender, MouseEventArgs e)
@@ -97,6 +173,11 @@ namespace vswpf
             else
             {
                 handTool.Start(position);
+                IBoardObject? boardObject = handTool.GetHoveredObject();
+                if (boardObject != null)
+                {
+                    mouseDownObject = boardObject.Clone();
+                }
             }
 
             InvalidateVisual();
@@ -110,11 +191,7 @@ namespace vswpf
             {
                 if (drawer.Click(position))
                 {
-                    IBoardObject boardObject = drawer.GetBoardObject();
-                    if (boardObject != null)
-                    {
-                        boardObjects.Add(boardObject);
-                    }
+                    AddObject(drawer.GetBoardObject());
                 }
             }
             else
@@ -125,7 +202,14 @@ namespace vswpf
                     IBoardObject boardObject = handTool.GetHoveredObject();
                     if (boardObject != null)
                     {
-                        boardObjects.Remove(boardObject);
+                        int index = boardObjects.IndexOf(boardObject);
+                        history.Push(new BoardHistoryItem()
+                        {
+                            Index = index,
+                            Action = BoardAction.Remove,
+                            Original = clone(boardObject),
+                        });
+                        boardObjects.RemoveAt(index);
                         handTool.Click(position);
                     }
                 }
@@ -133,6 +217,19 @@ namespace vswpf
                 {
                     IBoardObject boardObject = handTool.GetHoveredObject();
                     ObjectSelected?.Invoke(this, boardObject);
+
+                    if (objectMoved && mouseDownObject != null)
+                    {
+                        history.Push(new BoardHistoryItem()
+                        {
+                            Index = boardObjects.IndexOf(boardObject),
+                            Action = BoardAction.Modify,
+                            Original = clone(mouseDownObject),
+                            New = clone(boardObject),
+                        });
+                        mouseDownObject = null;
+                        objectMoved = false;
+                    }
                 }
             }
 
@@ -151,7 +248,10 @@ namespace vswpf
             }
             else if (drawer == null)
             {
-                handTool.Move(position);
+                if (handTool.Move(position))
+                {
+                    objectMoved = true;
+                }
             }
             
             InvalidateVisual();

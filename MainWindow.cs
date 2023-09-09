@@ -68,6 +68,8 @@ namespace vswpf
 
             panel.Children.Add(newButton("Save", saveButton_Click));
             panel.Children.Add(newButton("Load", loadButton_Click));
+            panel.Children.Add(newButton("Undo", undoButton_Click));
+            panel.Children.Add(newButton("Redo", redoButton_Click));
         }
         private void handButton_Click(object sender, RoutedEventArgs e)
         {
@@ -128,6 +130,16 @@ namespace vswpf
                 // TODO: beter error handling
                 MessageBox.Show("Fail to load: " + ex.Message);
             }
+        }
+        private void undoButton_Click(object current, RoutedEventArgs e)
+        {
+            vsBoard.Undo();
+            vsBoard.InvalidateVisual();
+        }
+        private void redoButton_Click(object current, RoutedEventArgs e)
+        {
+            vsBoard.Redo();
+            vsBoard.InvalidateVisual();
         }
         private Button newButton(string content, RoutedEventHandler handler)
         {

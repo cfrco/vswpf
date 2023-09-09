@@ -60,7 +60,7 @@ namespace vswpf
             boardObjects.Insert(movingIndex, movedObject);
         }
 
-        public void Move(Point position)
+        public bool Move(Point position)
         {
             if (movingObject)
             {
@@ -68,10 +68,11 @@ namespace vswpf
                 movedObject.Offset(new Point(position.X - movingStart.X, position.Y - movingStart.Y));
                 boardObjects.RemoveAt(movingIndex);
                 boardObjects.Insert(movingIndex, movedObject);
-                return;
+                return true;
             }
 
             checkHover(position);
+            return false;
         }
         
         private void checkHover(Point position)
