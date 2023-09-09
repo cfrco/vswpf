@@ -53,7 +53,13 @@ namespace VsWpf.BoardObject
                 double c = 1.0 - a - b;
 
                 // Check if point is inside the triangle
-                return (0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1);
+                if (0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1)
+                {
+                    return true;
+                }
+                return Geometry.PointInLine(Point0, Point1, position, 0, distance) ||
+                    Geometry.PointInLine(Point1, Point2, position, 0, distance) ||
+                    Geometry.PointInLine(Point2, Point0, position, 0, distance);
             }
 
             return Geometry.PointInLine(Point0, Point1, position, Thickness, distance) ||

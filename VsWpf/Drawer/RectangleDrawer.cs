@@ -17,7 +17,7 @@ namespace VsWpf.Drawer
             Point leftTop;
             double width;
             double height;
-            BoardRectangle.CalcRecntagle(start, end, out leftTop, out width, out height);
+            BoardRectangle.CalculateRectangle(start, end, out leftTop, out width, out height);
             return adjustShape(new BoardRectangle()
             {
                 LeftTop = leftTop,
@@ -31,7 +31,7 @@ namespace VsWpf.Drawer
             Point leftTop;
             double width;
             double height;
-            BoardRectangle.CalcRecntagle(start, end, out leftTop, out width, out height);
+            BoardRectangle.CalculateRectangle(start, end, out leftTop, out width, out height);
             if (thickness <= 0)
             {
                 BoardRectangle.Render(engine, new SolidColorBrush(color), null, leftTop, width, height);

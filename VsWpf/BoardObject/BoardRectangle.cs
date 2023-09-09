@@ -45,8 +45,8 @@ namespace VsWpf.BoardObject
         {
             if (Thickness <= 0)
             {
-                return position.X >= LeftTop.X && position.X <= LeftTop.X + Width &&
-                    position.Y >= LeftTop.Y && position.Y <= LeftTop.Y + Height;
+                return position.X >= LeftTop.X - distance && position.X <= LeftTop.X + Width + distance &&
+                    position.Y >= LeftTop.Y - distance && position.Y <= LeftTop.Y + Height + distance;
             }
 
             Point point0 = LeftTop;
@@ -74,7 +74,7 @@ namespace VsWpf.BoardObject
             engine.RenderPath(brush, pen, new Point[] { point0, point1, point2, point3 });
         }
 
-        public static void CalcRecntagle(Point point0, Point point1, out Point leftTop, out double width, out double height)
+        public static void CalculateRectangle(Point point0, Point point1, out Point leftTop, out double width, out double height)
         {
             double x1 = point0.X;
             double x2 = point1.X;

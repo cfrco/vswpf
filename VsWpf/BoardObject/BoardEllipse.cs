@@ -34,7 +34,7 @@ namespace VsWpf.BoardObject
             {
                 Pen pen = new Pen(Brushes.Black, 1);
                 double x, y, rx, ry;
-                calculateEllipse(Point0, Point1, out x, out y, out rx, out ry);
+                CalculateEllipse(Point0, Point1, out x, out y, out rx, out ry);
                 engine.RenderSquare(pen, new Point(x + rx, y), 5);
                 engine.RenderSquare(pen, new Point(x - rx, y), 5);
                 engine.RenderSquare(pen, new Point(x, y + ry), 5);
@@ -45,7 +45,7 @@ namespace VsWpf.BoardObject
         public override bool MouseTest(Point position, double distance)
         {
             double x, y, rx, ry;
-            calculateEllipse(Point0, Point1, out x, out y, out rx, out ry);
+            CalculateEllipse(Point0, Point1, out x, out y, out rx, out ry);
 
             double thickness = Thickness > 0 ? Thickness : 0;
 
@@ -70,11 +70,11 @@ namespace VsWpf.BoardObject
         public static void Render(IRenderEngine engine, Brush? brush, Pen? pen, Point point0, Point point1)
         {
             double x, y, rx, ry;
-            calculateEllipse(point0, point1, out x, out y, out rx, out ry);
+            CalculateEllipse(point0, point1, out x, out y, out rx, out ry);
             engine.RenderEllipse(brush, pen, new Point(x, y), rx, ry);
         }
 
-        private static void calculateEllipse(Point point0, Point point1, out double x, out double y, out double rx, out double ry)
+        public static void CalculateEllipse(Point point0, Point point1, out double x, out double y, out double rx, out double ry)
         {
             x = (point0.X + point1.X) / 2;
             y = (point0.Y + point1.Y) / 2;

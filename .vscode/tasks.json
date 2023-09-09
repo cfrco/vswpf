@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/VsWpf/VsWpf.csproj",
+                "${workspaceFolder}/vswpf.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/VsWpf/VsWpf.csproj"
+                "${workspaceFolder}/vswpf.sln"
             ],
             "problemMatcher": "$msCompile"
         }
