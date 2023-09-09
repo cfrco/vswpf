@@ -65,7 +65,7 @@ namespace vswpf.BoardObject
             return new BoardRectangle(this);
         }
 
-        public static void Render(IRenderEngine engine, Brush brush, Pen pen, Point point, double width, double height)
+        public static void Render(IRenderEngine engine, Brush? brush, Pen? pen, Point point, double width, double height)
         {
             Point point0 = point;
             Point point1 = Geometry.Offset(point, new Point(0, height));

@@ -66,7 +66,7 @@ namespace vswpf.BoardObject
             return new BoardTriangle(this);
         }
 
-        public static void Render(IRenderEngine engine, Brush brush, Pen pen, Point point0, Point point1, Point point2)
+        public static void Render(IRenderEngine engine, Brush? brush, Pen? pen, Point point0, Point point1, Point point2)
         {
             engine.RenderPath(brush, pen, new Point[] { point0, point1, point2 });
         }

@@ -67,7 +67,7 @@ namespace vswpf.BoardObject
             return new BoardEllipse(this);
         }
 
-        public static void Render(IRenderEngine engine, Brush brush, Pen pen, Point point0, Point point1)
+        public static void Render(IRenderEngine engine, Brush? brush, Pen? pen, Point point0, Point point1)
         {
             double x, y, rx, ry;
             calculateEllipse(point0, point1, out x, out y, out rx, out ry);

@@ -174,7 +174,7 @@ namespace vswpf
             };
         }
 
-        private void vsBoard_ObjectSelected(VsBoard sender, IBoardObject obj)
+        private void vsBoard_ObjectSelected(VsBoard sender, IBoardObject? obj)
         {
             selectedObject = obj;
             shapeModifierPanel.SetObject(obj);

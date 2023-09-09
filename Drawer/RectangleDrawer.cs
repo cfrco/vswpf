@@ -7,7 +7,7 @@ namespace vswpf.Drawer
 {
     class RectangleDrawer : AbsTwoPointsDrawer
     {
-        public override IBoardObject GetBoardObject()
+        public override IBoardObject? GetBoardObject()
         {
             if (Geometry.Distance(start, end) <= 2)
             {

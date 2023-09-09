@@ -16,8 +16,8 @@ namespace vswpf
         private Label colorLabel;
         private Label colorPanel;
 
-        private BoardShape selectedShape;
-        public event EventHandler ValueChanged;
+        private BoardShape? selectedShape;
+        public event EventHandler? ValueChanged;
 
         public double Thickness { get { return Math.Round(scrollBar.Value); } }
         public Color Color { get { return getColor(); } }
@@ -65,9 +65,9 @@ namespace vswpf
             Children.Add(colorPanel);
         }
 
-        public void SetObject(IBoardObject boardObject)
+        public void SetObject(IBoardObject? boardObject)
         {
-            BoardShape shape = boardObject as BoardShape;
+            BoardShape? shape = boardObject as BoardShape;
             if (shape == null)
             {
                 selectedShape = null;
@@ -243,7 +243,7 @@ namespace vswpf
                 }
             }
 
-            public event EventHandler ValueChanged;
+            public event EventHandler? ValueChanged;
 
             public NumericTextBox()
             {

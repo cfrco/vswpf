@@ -62,7 +62,7 @@ namespace vswpf
 
         public bool Move(Point position)
         {
-            if (movingObject)
+            if (movingObject && hoveredObject != null)
             {
                 movedObject = hoveredObject.Clone();
                 movedObject.Offset(new Point(position.X - movingStart.X, position.Y - movingStart.Y));
@@ -110,7 +110,7 @@ namespace vswpf
             return false;
         }
 
-        public IBoardObject GetHoveredObject()
+        public IBoardObject? GetHoveredObject()
         {
             return hoveredObject;
         }

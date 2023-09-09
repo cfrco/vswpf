@@ -5,7 +5,7 @@ namespace vswpf.Drawer
 {
     class EllipseDrawer : AbsTwoPointsDrawer
     {
-        public override IBoardObject GetBoardObject()
+        public override IBoardObject? GetBoardObject()
         {
             if (Geometry.Distance(start, end) <= 2)
             {

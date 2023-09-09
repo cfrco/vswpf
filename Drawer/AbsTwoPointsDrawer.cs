@@ -83,7 +83,7 @@ namespace vswpf.Drawer
             return true;
         }
 
-        public virtual IBoardObject GetBoardObject()
+        public virtual IBoardObject? GetBoardObject()
         {
             return null;
         }

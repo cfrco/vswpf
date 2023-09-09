@@ -19,10 +19,10 @@ namespace vswpf
         List<IBoardObject> boardObjects = new List<IBoardObject>();
 
         BoardHistory history = new BoardHistory(100);
-        private IBoardObject mouseDownObject;
+        private IBoardObject? mouseDownObject;
         private bool objectMoved = false;
 
-        public event Action<VsBoard, IBoardObject>? ObjectSelected;
+        public event Action<VsBoard, IBoardObject?>? ObjectSelected;
 
         public VsBoard()
         {
@@ -199,7 +199,7 @@ namespace vswpf
                 handTool.Click(position);
                 if (handTool.Mode == HandMode.Erase)
                 {
-                    IBoardObject boardObject = handTool.GetHoveredObject();
+                    IBoardObject? boardObject = handTool.GetHoveredObject();
                     if (boardObject != null)
                     {
                         int index = boardObjects.IndexOf(boardObject);
@@ -215,10 +215,10 @@ namespace vswpf
                 }
                 else
                 {
-                    IBoardObject boardObject = handTool.GetHoveredObject();
+                    IBoardObject? boardObject = handTool.GetHoveredObject();
                     ObjectSelected?.Invoke(this, boardObject);
 
-                    if (objectMoved && mouseDownObject != null)
+                    if (objectMoved && mouseDownObject != null && boardObject != null)
                     {
                         history.Push(new BoardHistoryItem()
                         {

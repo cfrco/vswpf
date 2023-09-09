@@ -17,7 +17,7 @@ namespace vswpf.RenderEngine
             dc.DrawLine(pen, point0, point1);
         }
 
-        public void RenderPath(Brush brush, Pen pen, Point[] points)
+        public void RenderPath(Brush? brush, Pen? pen, Point[] points)
         {
             StreamGeometry geometry = new StreamGeometry();
             using (StreamGeometryContext ctx = geometry.Open())
@@ -30,7 +30,7 @@ namespace vswpf.RenderEngine
             dc.DrawGeometry(brush, pen, geometry);
         }
 
-        public void RenderEllipse(Brush brush, Pen pen, Point center, double radiusX, double radiusY)
+        public void RenderEllipse(Brush? brush, Pen? pen, Point center, double radiusX, double radiusY)
         {
             dc.DrawEllipse(brush, pen, center, radiusX, radiusY);
         }
