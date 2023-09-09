@@ -8,6 +8,7 @@ namespace VsWpf
         Modify, // Attributes and Offset
         Add,
         Remove,
+        Swap,
     }
 
     class BoardHistoryItem
@@ -17,6 +18,8 @@ namespace VsWpf
 
         public IBoardObject? Original { get; set;}
         public IBoardObject? New { get; set;}
+
+        public int SwapTarget { get; set;}
     }
 
 

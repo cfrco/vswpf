@@ -96,6 +96,44 @@ namespace VsWpf
             boardObjects.Add(boardObject);
         }
 
+        public void ZMoveObject(IBoardObject? boardObject, int step)
+        {
+            if (boardObject == null)
+            {
+                return;
+            }
+
+            int index = boardObjects.IndexOf(boardObject);
+            if (index < 0)
+            {
+                return;
+            }
+
+            int target = index + step;
+            if (target < 0)
+            {
+                target = 0;
+            }
+            else if (target >= boardObjects.Count)
+            {
+                target = boardObjects.Count - 1;
+            }
+
+            if (target == index)
+            {
+                return;
+            }
+
+            history.Push(new BoardHistoryItem()
+            {
+                Index = index,
+                Action = BoardAction.Swap,
+                SwapTarget = target,
+            });
+            boardObjects.RemoveAt(index);
+            boardObjects.Insert(target, boardObject);
+        }
+
         public void Undo()
         {
             BoardHistoryItem? item = history.Pop();
@@ -122,6 +160,14 @@ namespace VsWpf
                     boardObjects.RemoveAt(item.Index);
                     boardObjects.Insert(item.Index, clone(item.Original));
                 }
+            }
+            else if (item.Action == BoardAction.Swap)
+            {
+                int current = item.SwapTarget;
+                int restore = item.Index;
+                IBoardObject boardObject = boardObjects[current];
+                boardObjects.RemoveAt(current);
+                boardObjects.Insert(restore, boardObject);
             }
         }
 
@@ -151,6 +197,14 @@ namespace VsWpf
                     boardObjects.RemoveAt(item.Index);
                     boardObjects.Insert(item.Index, clone(item.New));
                 }
+            }
+            else if (item.Action == BoardAction.Swap)
+            {
+                int current = item.Index;
+                int restore = item.SwapTarget;
+                IBoardObject boardObject = boardObjects[current];
+                boardObjects.RemoveAt(current);
+                boardObjects.Insert(restore, boardObject);
             }
         }
 

@@ -83,6 +83,9 @@ namespace VsWpf
             shapeModifierPanel = new ShapeModifierPanel();
             shapeModifierPanel.ValueChanged += shapeModifierPanel_ValueChanged;
             panel.Children.Add(shapeModifierPanel);
+
+            panel.Children.Add(newButton("Front", frontButton_Click));
+            panel.Children.Add(newButton("Back", backButton_Click));
         }
         private Button addToolButton(Panel panel, Button button)
         {
@@ -101,6 +104,16 @@ namespace VsWpf
             toggleButton(sender);
             vsBoard.SetDrawer(null);
             vsBoard.SetHandMode(HandMode.Erase);
+        }
+        private void frontButton_Click(object sender, RoutedEventArgs e)
+        {
+            vsBoard.ZMoveObject(selectedObject, 1);
+            vsBoard.InvalidateVisual();
+        }
+        private void backButton_Click(object sender, RoutedEventArgs e)
+        {
+            vsBoard.ZMoveObject(selectedObject, -1);
+            vsBoard.InvalidateVisual();
         }
         private RoutedEventHandler drawerButton_ClickEvent(IDrawer drawer)
         {

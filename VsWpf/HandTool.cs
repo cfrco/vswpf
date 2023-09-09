@@ -78,8 +78,14 @@ namespace VsWpf
         private void checkHover(Point position)
         {
             bool selected = false;
-            foreach (IBoardObject bo in boardObjects)
+            for (int i = boardObjects.Count - 1; i >= 0; i--)
             {
+                IBoardObject? bo = boardObjects[i];
+                if (bo == null)
+                {
+                    continue;
+                }
+
                 if (bo.MouseTest(position, 2))
                 {
                     selected = true;
