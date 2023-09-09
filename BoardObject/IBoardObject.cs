@@ -5,6 +5,8 @@ namespace vswpf.BoardObject
 {
     public interface IBoardObject
     {
+        bool Selected { get; set; }
+
         void Render(IRenderEngine engine);
 
         bool MouseTest(Point position, double distance);

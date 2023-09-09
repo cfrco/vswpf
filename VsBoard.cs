@@ -14,11 +14,11 @@ namespace vswpf
     {
         Point mouseMarker = new Point(-1, -1);
 
-        IDrawer drawer = null;
+        IDrawer? drawer = null;
         HandTool handTool;
         List<IBoardObject> boardObjects = new List<IBoardObject>();
 
-        public event Action<VsBoard, IBoardObject> ObjectSelected;
+        public event Action<VsBoard, IBoardObject>? ObjectSelected;
 
         public VsBoard()
         {
@@ -33,7 +33,7 @@ namespace vswpf
             MouseLeave += onMouseLeave;
         }
 
-        public void SetDrawer(IDrawer drawer)
+        public void SetDrawer(IDrawer? drawer)
         {
             this.drawer = drawer;
             handTool.Reset();
@@ -74,6 +74,16 @@ namespace vswpf
             {
                 boardObjects.Add(bo);
             }
+        }
+
+        public void AddObject(IBoardObject boardObject)
+        {
+            if (boardObject == null)
+            {
+                return;
+            }
+
+            boardObjects.Add(boardObject);
         }
 
         private void onMouseDown(object sender, MouseEventArgs e)
@@ -157,11 +167,9 @@ namespace vswpf
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-
             dc.PushClip(new RectangleGeometry(new Rect(0, 0, ActualWidth, ActualHeight)));
 
             IRenderEngine engine = new NativeDrawingRenderEngine(dc);
-
             foreach (IBoardObject obj in boardObjects)
             {
                 if (obj == null)
@@ -175,10 +183,8 @@ namespace vswpf
             {
                 drawer.Render(engine);
             }
-
             renderMouse(engine);
         }
-
         private void renderMouse(IRenderEngine engine)
         {
             if (mouseMarker.X < 0 || mouseMarker.Y < 0)

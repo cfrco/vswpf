@@ -19,8 +19,7 @@ namespace vswpf
         public HandMode Mode { get; set; }
 
         // Hover
-        [AllowNull]
-        private IBoardObject hoveredObject = null;
+        private IBoardObject? hoveredObject = null;
         public bool Hovered 
         {
             get { return hoveredObject != null; }
@@ -95,13 +94,10 @@ namespace vswpf
 
         private void selectToHovered()
         {
-            boardObjects.Where(bo => bo is BoardShape)
-                .Select(bo => bo as BoardShape)
-                .ToList().ForEach(bo => { bo.Selected = false; });
-            BoardShape shape = hoveredObject as BoardShape;
-            if (shape != null)
+            boardObjects.ForEach(bo => { bo.Selected = false; });
+            if (hoveredObject != null)
             {
-                shape.Selected = true;
+                hoveredObject.Selected = true;
             }
         }
 

@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Newtonsoft.Json;
 using vswpf.Drawer;
 using vswpf.BoardObject;
+using System.Collections.Generic;
 
 namespace vswpf
 {
     public partial class MainWindow : Window
     {
+        // Controls, Elements
         private VsBoard vsBoard;
         private ShapeModifierPanel shapeModifierPanel;
 
+        // Board
+        private IBoardObject selectedObject;
+        private IBoardObject copiedObject;
+
+        // Exporting
         private JsonSerializerSettings serializerSettings = new JsonSerializerSettings()
         {
             TypeNameHandling = TypeNameHandling.Auto,
@@ -39,6 +47,9 @@ namespace vswpf
             vsBoard = new VsBoard();
             vsBoard.ObjectSelected += vsBoard_ObjectSelected;
             grid.AddChild(vsBoard, 0, 1);
+
+            KeyDown += onKeyDown;
+            KeyUp += onKeyUp;
         }
 
         private void initSideBar(StackPanel panel)
@@ -106,7 +117,7 @@ namespace vswpf
             try
             {
                 string text = System.IO.File.ReadAllText(ofd.FileName);
-                IBoardObject[] boardObjects = JsonConvert.DeserializeObject<IBoardObject[]>(text, serializerSettings);
+                IBoardObject[]? boardObjects = JsonConvert.DeserializeObject<IBoardObject[]>(text, serializerSettings);
                 if (boardObjects != null)
                 {
                     vsBoard.SetObjects(boardObjects);
@@ -142,6 +153,7 @@ namespace vswpf
 
         private void vsBoard_ObjectSelected(VsBoard sender, IBoardObject obj)
         {
+            selectedObject = obj;
             shapeModifierPanel.SetObject(obj);
         }
 
@@ -149,6 +161,40 @@ namespace vswpf
         {
             vsBoard.SetDrawerAttributes(shapeModifierPanel.Thickness, shapeModifierPanel.Color);
             vsBoard.InvalidateVisual();
+        }
+
+        private HashSet<Key> keyDownSet = new HashSet<Key>();
+        private void onKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!keyDownSet.Contains(e.Key))
+            {
+                keyDownSet.Add(e.Key);
+            }
+        }
+        private void onKeyUp(object sender, KeyEventArgs e)
+        {
+            if (keyDownSet.Contains(e.Key))
+            {
+                keyDownSet.Remove(e.Key);
+            }
+
+            if (e.Key == Key.C && keyDownSet.Contains(Key.LeftCtrl))
+            {
+                if (selectedObject != null)
+                {
+                    copiedObject = selectedObject.Clone();
+                    copiedObject.Selected = false;
+                }
+            }
+            else if (e.Key == Key.V && keyDownSet.Contains(Key.LeftCtrl))
+            {
+                if (copiedObject != null)
+                {
+                    copiedObject.Offset(new Point(10, 10));
+                    vsBoard.AddObject(copiedObject.Clone());
+                    vsBoard.InvalidateVisual();
+                }
+            }
         }
     }
 }

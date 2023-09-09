@@ -20,37 +20,47 @@ namespace vswpf
         public event EventHandler ValueChanged;
 
         public double Thickness { get { return Math.Round(scrollBar.Value); } }
-        public Color Color { get { return (colorPanel.Background as SolidColorBrush).Color; } }
+        public Color Color { get { return getColor(); } }
 
         public ShapeModifierPanel()
         {
-            thicknessLabel = new Label();
-            thicknessLabel.FontSize = 10;
-            thicknessLabel.Content = "Thickness";
+            thicknessLabel = new Label
+            {
+                FontSize = 10,
+                Content = "Thickness"
+            };
             Children.Add(thicknessLabel);
 
-            thicknessText = new TextBox();
-            thicknessText.IsReadOnly = true;
-            thicknessText.Text = "1";
+            thicknessText = new TextBox
+            {
+                IsReadOnly = true,
+                Text = "1"
+            };
             Children.Add(thicknessText);
 
-            scrollBar = new ScrollBar();
-            scrollBar.Orientation = Orientation.Horizontal;
-            scrollBar.SmallChange = 1;
-            scrollBar.Minimum = 0;
-            scrollBar.Maximum = 15;
-            scrollBar.Value = 1;
+            scrollBar = new ScrollBar
+            {
+                Orientation = Orientation.Horizontal,
+                SmallChange = 1,
+                Minimum = 0,
+                Maximum = 15,
+                Value = 1
+            };
             scrollBar.ValueChanged += scrollBar_ValueChanged;
             Children.Add(scrollBar);
 
-            colorLabel = new Label();
-            colorLabel.FontSize = 10;
-            colorLabel.Content = "Color";
+            colorLabel = new Label
+            {
+                FontSize = 10,
+                Content = "Color"
+            };
             Children.Add(colorLabel);
 
-            colorPanel = new Label();
-            colorPanel.Height = 20;
-            colorPanel.Background = Brushes.Red;
+            colorPanel = new Label
+            {
+                Height = 20,
+                Background = Brushes.Red
+            };
             colorPanel.MouseDoubleClick += colorPanel_MouseDoubleClick;
             Children.Add(colorPanel);
         }
@@ -82,21 +92,16 @@ namespace vswpf
 
         private void colorPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ColorWindow cw = new ColorWindow();
-            cw.WindowStyle = WindowStyle.SingleBorderWindow;
-            cw.ResizeMode = ResizeMode.NoResize;
-            SolidColorBrush brush = colorPanel.Background as SolidColorBrush;
-            if (brush != null)
+            ColorWindow cw = new ColorWindow
             {
-                cw.R = brush.Color.R;
-                cw.G = brush.Color.G;
-                cw.B = brush.Color.B;
-            }
-            cw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            cw.Owner = Window.GetWindow(this);
+                WindowStyle = WindowStyle.SingleBorderWindow,
+                ResizeMode = ResizeMode.NoResize,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner = Window.GetWindow(this)
+            };
             cw.ShowDialog();
 
-            Color color = Color.FromArgb(255, cw.R, cw.G, cw.B);
+            Color color = getColor();
             colorPanel.Background = new SolidColorBrush(color);
 
             if (selectedShape != null)
@@ -104,6 +109,16 @@ namespace vswpf
                 selectedShape.Color = color;
             }
             ValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private Color getColor()
+        {
+            SolidColorBrush? brush = colorPanel.Background as SolidColorBrush;
+            if (brush != null)
+            {
+                return brush.Color;
+            }
+            return Colors.Red;
         }
     }
 
