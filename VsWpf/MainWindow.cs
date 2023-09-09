@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using Newtonsoft.Json;
 using VsWpf.Drawer;
 using VsWpf.BoardObject;
-using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace VsWpf
 {
@@ -51,8 +51,8 @@ namespace VsWpf
             toolBar.Items.Add(new Separator());
             toolBar.Items.Add(newButton("Clear", clearButton_Click));
             toolBar.Items.Add(new Separator());
-            toolBar.Items.Add(newButton("Undo", undoButton_Click));
-            toolBar.Items.Add(newButton("Redo", redoButton_Click));
+            toolBar.Items.Add(newButton("< Undo", undoButton_Click));
+            toolBar.Items.Add(newButton("Redo >", redoButton_Click));
             grid.AddChild(toolBar, 0, 0);
             Grid.SetColumnSpan(toolBar, 2);
 
@@ -68,34 +68,66 @@ namespace VsWpf
             KeyUp += onKeyUp;
         }
 
+        // Sidebar (DrawTool)
+        private List<Button> toolButtons = new List<Button>();
         private void initSideBar(StackPanel panel)
         {
-            panel.Children.Add(newButton("Line", drawerButton_ClickEvent(new LineDrawer())));
-            panel.Children.Add(newButton("Rect", drawerButton_ClickEvent(new RectangleDrawer())));
-            panel.Children.Add(newButton("Triangle", drawerButton_ClickEvent(new TriangleDrawer())));
-            panel.Children.Add(newButton("Ellipse", drawerButton_ClickEvent(new EllipseDrawer())));
-            panel.Children.Add(newButton("Hand", handButton_Click));
-            panel.Children.Add(newButton("Erase", eraseButton_Click));
+            Button handButton = addToolButton(panel, newButton("Hand", handButton_Click));
+            addToolButton(panel, newButton("Line", drawerButton_ClickEvent(new LineDrawer())));
+            addToolButton(panel, newButton("Rect", drawerButton_ClickEvent(new RectangleDrawer())));
+            addToolButton(panel, newButton("Triangle", drawerButton_ClickEvent(new TriangleDrawer())));
+            addToolButton(panel, newButton("Ellipse", drawerButton_ClickEvent(new EllipseDrawer())));
+            addToolButton(panel, newButton("Erase", eraseButton_Click));
+            toggleButton(handButton);
 
             shapeModifierPanel = new ShapeModifierPanel();
             shapeModifierPanel.ValueChanged += shapeModifierPanel_ValueChanged;
             panel.Children.Add(shapeModifierPanel);
-
+        }
+        private Button addToolButton(Panel panel, Button button)
+        {
+            panel.Children.Add(button);
+            toolButtons.Add(button);
+            return button;
         }
         private void handButton_Click(object sender, RoutedEventArgs e)
         {
+            toggleButton(sender);
             vsBoard.SetDrawer(null);
             vsBoard.SetHandMode(HandMode.Move);
         }
         private void eraseButton_Click(object sender, RoutedEventArgs e)
         {
+            toggleButton(sender);
             vsBoard.SetDrawer(null);
             vsBoard.SetHandMode(HandMode.Erase);
         }
-        private void clearButton_Click(object sender, RoutedEventArgs e)
+        private RoutedEventHandler drawerButton_ClickEvent(IDrawer drawer)
         {
-            vsBoard.ClearObjects();
+            return (sender, e) =>
+            {
+                toggleButton(sender);
+                drawer.SetAttributes(shapeModifierPanel.Thickness, shapeModifierPanel.Color);
+                vsBoard.SetDrawer(drawer);
+            };
         }
+        private void toggleButton(object sender)
+        {
+            toolButtons.ForEach(b =>
+            {
+                b.FontWeight = FontWeights.Normal;
+                b.Foreground = Brushes.Black;
+            });
+
+            Button? button = sender as Button;
+            if (button != null)
+            {
+                button.FontWeight = FontWeights.UltraBlack;
+                button.Foreground = Brushes.Red;
+            }
+        }
+
+        // Toolbar
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
@@ -142,6 +174,10 @@ namespace VsWpf
                 MessageBox.Show("Fail to load: " + ex.Message);
             }
         }
+        private void clearButton_Click(object sender, RoutedEventArgs e)
+        {
+            vsBoard.ClearObjects();
+        }
         private void undoButton_Click(object current, RoutedEventArgs e)
         {
             vsBoard.Undo();
@@ -151,27 +187,6 @@ namespace VsWpf
         {
             vsBoard.Redo();
             vsBoard.InvalidateVisual();
-        }
-        private Button newButton(string content, RoutedEventHandler handler)
-        {
-            Button button = new Button()
-            {
-                Content = content,
-                Height = 40,
-            };
-            if (handler != null) 
-            {
-                button.Click += handler;
-            }
-            return button;
-        }
-        private RoutedEventHandler drawerButton_ClickEvent(IDrawer drawer)
-        {
-            return (sender, e) =>
-            {
-                drawer.SetAttributes(shapeModifierPanel.Thickness, shapeModifierPanel.Color);
-                vsBoard.SetDrawer(drawer);
-            };
         }
 
         private void vsBoard_ObjectSelected(VsBoard sender, IBoardObject? obj)
@@ -186,6 +201,7 @@ namespace VsWpf
             vsBoard.InvalidateVisual();
         }
 
+        // Keyboard
         private HashSet<Key> keyDownSet = new HashSet<Key>();
         private void onKeyDown(object sender, KeyEventArgs e)
         {
@@ -218,6 +234,20 @@ namespace VsWpf
                     vsBoard.InvalidateVisual();
                 }
             }
+        }
+    
+        private static Button newButton(string content, RoutedEventHandler handler)
+        {
+            Button button = new Button()
+            {
+                Content = content,
+                Height = 40,
+            };
+            if (handler != null) 
+            {
+                button.Click += handler;
+            }
+            return button;
         }
     }
 }
