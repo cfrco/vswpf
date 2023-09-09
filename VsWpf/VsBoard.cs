@@ -4,11 +4,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using vswpf.BoardObject;
-using vswpf.Drawer;
-using vswpf.RenderEngine;
+using VsWpf.BoardObject;
+using VsWpf.Drawer;
+using VsWpf.RenderEngine;
 
-namespace vswpf
+namespace VsWpf
 {
     partial class VsBoard : Canvas
     {

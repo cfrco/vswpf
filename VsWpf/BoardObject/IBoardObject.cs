@@ -1,7 +1,7 @@
 using System.Windows;
-using vswpf.RenderEngine;
+using VsWpf.RenderEngine;
 
-namespace vswpf.BoardObject
+namespace VsWpf.BoardObject
 {
     public interface IBoardObject
     {

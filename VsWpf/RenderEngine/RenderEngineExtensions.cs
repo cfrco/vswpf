@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace vswpf.RenderEngine
+namespace VsWpf.RenderEngine
 {
     static class RenderEngineExtensions
     {

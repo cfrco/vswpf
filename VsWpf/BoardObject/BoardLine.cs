@@ -1,9 +1,9 @@
 using System;
 using System.Windows;
 using System.Windows.Media;
-using vswpf.RenderEngine;
+using VsWpf.RenderEngine;
 
-namespace vswpf.BoardObject
+namespace VsWpf.BoardObject
 {
     class BoardLine : BoardShape
     {

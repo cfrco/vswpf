@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using vswpf.BoardObject;
+using VsWpf.BoardObject;
 
-namespace vswpf
+namespace VsWpf
 {
     enum BoardAction
     {

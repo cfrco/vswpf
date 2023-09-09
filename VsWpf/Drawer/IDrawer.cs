@@ -1,9 +1,9 @@
 using System.Windows;
 using System.Windows.Media;
-using vswpf.BoardObject;
-using vswpf.RenderEngine;
+using VsWpf.BoardObject;
+using VsWpf.RenderEngine;
 
-namespace vswpf.Drawer
+namespace VsWpf.Drawer
 {
     public interface IDrawer
     {

@@ -1,10 +1,9 @@
-using System.Windows.Media;
-using vswpf.BoardObject;
-using vswpf.RenderEngine;
+using VsWpf.BoardObject;
+using VsWpf.RenderEngine;
 
-namespace vswpf.Drawer
+namespace VsWpf.Drawer
 {
-    class LineDrawer : AbsTwoPointsDrawer
+    class EllipseDrawer : AbsTwoPointsDrawer
     {
         public override IBoardObject? GetBoardObject()
         {
@@ -13,7 +12,7 @@ namespace vswpf.Drawer
                 return null;
             }
 
-            return adjustShape(new BoardLine()
+            return adjustShape(new BoardEllipse()
             {
                 Point0 = start,
                 Point1 = end,
@@ -22,7 +21,7 @@ namespace vswpf.Drawer
 
         public override void Render(IRenderEngine engine)
         {
-            engine.RenderLine(new Pen(new SolidColorBrush(color), thickness > 0 ? thickness : 1), start, end);
+            BoardEllipse.Render(engine, getBrush(), getPen(), start, end);
         }
     }
 }

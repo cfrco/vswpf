@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
-using vswpf.BoardObject;
+using VsWpf.BoardObject;
 
-namespace vswpf
+namespace VsWpf
 {
     enum HandMode
     {

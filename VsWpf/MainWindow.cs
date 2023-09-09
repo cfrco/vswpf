@@ -3,12 +3,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Newtonsoft.Json;
-using vswpf.Drawer;
-using vswpf.BoardObject;
+using VsWpf.Drawer;
+using VsWpf.BoardObject;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace vswpf
+namespace VsWpf
 {
     public partial class MainWindow : Window
     {

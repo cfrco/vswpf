@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 
-namespace vswpf
+namespace VsWpf
 {
     static class GridExtensions
     {

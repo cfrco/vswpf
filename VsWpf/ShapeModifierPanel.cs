@@ -4,9 +4,9 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using vswpf.BoardObject;
+using VsWpf.BoardObject;
 
-namespace vswpf
+namespace VsWpf
 {
     class ShapeModifierPanel : StackPanel
     {

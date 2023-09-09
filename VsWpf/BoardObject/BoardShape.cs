@@ -1,8 +1,8 @@
 using System.Windows;
 using System.Windows.Media;
-using vswpf.RenderEngine;
+using VsWpf.RenderEngine;
 
-namespace vswpf.BoardObject
+namespace VsWpf.BoardObject
 {
     abstract class BoardShape : IBoardObject
     {
