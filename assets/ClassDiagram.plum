@@ -1,0 +1,75 @@
+@startuml
+IBoardObject <|.. BoardShape
+BoardShape <|-- BoardLine
+BoardShape <|-- BoardRectangle
+BoardShape <|-- BoardTriangle
+BoardShape <|-- BoardEllipse
+
+IDrawer ..> IBoardObject
+IDrawer <|.. AbsTwoPointsDrawer
+AbsTwoPointsDrawer <|-- LineDrawer
+AbsTwoPointsDrawer <|-- RectangleDrawer
+AbsTwoPointsDrawer <|-- TriangleDrawer
+AbsTwoPointsDrawer <|-- EllipseDrawer
+
+IBoardObject ..> IRenderEngine
+IDrawer ..> IRenderEngine
+IRenderEngine <|.. NativeDrawingRenderEngine
+
+VsBoard *-- IRenderEngine
+VsBoard o-- IDrawer
+VsBoard "1" o-- "many" IBoardObject
+
+interface IBoardObject
+{
+    +Selected: bool
+    +Render(IRenderEngine engine): void
+    +MouseTest(Point position, double distance): bool
+    +Offset(Point offset): void
+    +Clone(): IBoardObject
+}
+
+abstract class BoardShape
+{
+    +Selected: bool
+    +Thickness: double
+    +Color:Color
+
+    + {abstract} Render(IRenderEngine engine): void
+    + {abstract} MouseTest(Point position, double distance): bool
+    + {abstract} Offset(Point offset): void
+    + {abstract} Clone(): IBoardObject
+}
+
+interface IDrawer
+{
+    +Started: bool
+    +SetAttributes(double thickness, Color color): void
+    +Start(Point position): void
+    +Move(Point position): void
+    +Click(Point position): bool
+    +Render(IRenderEngine engine): void
+    +GetBoardObject(): IBoardObject? 
+}
+
+abstract class AbsTwoPointsDrawer
+{
+    +Started: bool
+    #getPen(): Pen
+    #getBrush(): Brush
+    #adjustShape(BoardShape shape): IBoardObject
+    +SetAttributes(double thickness, Color color): void
+    +Start(Point position): void
+    +Move(Point position): void
+    +Click(Point position): bool
+    + {abstract} Render(IRenderEngine engine): void
+    + {abstract} GetBoardObject(): IBoardObject?
+}
+
+interface IRenderEngine
+{
+    +RenderLine(...): void
+    +RenderEllipse(...): void
+    +RenderPath(...): void
+}
+@enduml

@@ -1,5 +1,0 @@
-# Design
-
-## Class
-- IBoardObject
-- BoardRenderEngine
