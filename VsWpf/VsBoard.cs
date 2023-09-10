@@ -26,7 +26,7 @@ namespace VsWpf
 
         public VsBoard()
         {
-            Background = Brushes.Gray;
+            Background = Brushes.White;
             Cursor = Cursors.None;
 
             handTool = new HandTool(boardObjects);
@@ -62,6 +62,7 @@ namespace VsWpf
         public void ClearObjects()
         {
             boardObjects.Clear();
+            history.Clear();
 
             InvalidateVisual();
         }
@@ -150,7 +151,7 @@ namespace VsWpf
             {
                 if (item.Original != null)
                 {
-                    boardObjects.Add(clone(item.Original));
+                    boardObjects.Insert(item.Index, clone(item.Original));
                 }
             }
             else if (item.Action == BoardAction.Modify)

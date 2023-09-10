@@ -76,5 +76,11 @@ namespace VsWpf
             current++;
             return items[current];
         }
+
+        public void Clear()
+        {
+            items.Clear();
+            current = -1;
+        }
     }
 }

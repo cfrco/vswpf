@@ -57,6 +57,7 @@ namespace VsWpf
             Grid.SetColumnSpan(toolBar, 2);
 
             StackPanel sPanel = new StackPanel();
+            sPanel.Background = Brushes.LightGray;
             initSideBar(sPanel);
             grid.AddChild(sPanel, 1, 0);
 
