@@ -25,6 +25,13 @@ VsBoard is a painting application like mspaint. The user can draw different shap
 - `Newtonsoft.Json` for saving and loading features.
 - `xUnit` and `coverlet.collector` for unit test and coverage analysis.
 
+## Instructions
+```
+$ dotnet build # Build the whole solution including VsWpf and VsWpf.Tests.
+$ dotnet test # Run unit tests
+$ dotnet run --project VsWpf/VsWpf.csproj # Start the program.
+```
+
 ## Design
 ### Class Diagram
 ![ClassDiagram](assets/ClassDiagram.svg)
